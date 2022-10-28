@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class ItemsController: ControllerBase{
+public class ItemsController : ControllerBase
+{
     private readonly IItemsRepository repository;
 
-    public ItemsController(IItemsRepository repository){
+    public ItemsController(IItemsRepository repository)
+    {
         this.repository = repository;
     }
 
@@ -20,9 +22,11 @@ public class ItemsController: ControllerBase{
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Item> GetItem(Guid id){
+    public ActionResult<Item> GetItem(Guid id)
+    {
         var item = repository.GetItem(id);
-        if(item is null){
+        if (item is null)
+        {
             return NotFound();
         }
         return Ok(item);
