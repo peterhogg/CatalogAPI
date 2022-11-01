@@ -44,10 +44,7 @@ public class ItemsControllerTest
         // Act
         var result = await controller.GetItemAsycn(Guid.NewGuid());
         // Assert
-        result.Value.Should().BeEquivalentTo(
-            expectedItem,
-            options => options.ComparingByMembers<Item>()
-        );
+        result.Value.Should().BeEquivalentTo(expectedItem);
     }
 
     [Fact]
@@ -63,21 +60,14 @@ public class ItemsControllerTest
         var result = await controller.GetItemsAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(
-            expectedItems,
-            options => options.ComparingByMembers<Item>()
-        );
+        result.Should().BeEquivalentTo(expectedItems);
     }
 
     [Fact]
     public async Task CreateItemAsycn_WithItemToCreate_ReturnsCreatedItem()
     {
         // Arrange
-        var itemToCreate = new CreateItemDto()
-        {
-            Name = Guid.NewGuid().ToString(),
-            Price = rand.Next(1000)
-        };
+        var itemToCreate = new CreateItemDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), rand.Next(1000));
 
         var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
 
@@ -104,11 +94,7 @@ public class ItemsControllerTest
         var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
 
         var itemId = existingItem.Id;
-        var itemToUpdate = new UpdateItemDto()
-        {
-            Name = Guid.NewGuid().ToString(),
-            Price = Math.Min((existingItem.Price + 3), 1000)
-        };
+        var itemToUpdate = new UpdateItemDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Math.Min((existingItem.Price + 3), 1000));
 
         // Act
         var result = await controller.UpdateItemAsync(itemId, itemToUpdate);
