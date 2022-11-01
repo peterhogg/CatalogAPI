@@ -10,10 +10,12 @@ namespace Catalog.Api.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IItemsRepository repository;
+    private readonly ILogger<ItemsController> logger;
 
-    public ItemsController(IItemsRepository repository)
+    public ItemsController(IItemsRepository repository, ILogger<ItemsController> logger)
     {
         this.repository = repository;
+        this.logger = logger;
     }
 
     [HttpGet]
@@ -21,6 +23,7 @@ public class ItemsController : ControllerBase
     {
         var items = (await repository.GetItemsAsync())
                     .Select(item => item.AsDto());
+        this.logger.LogInformation($"{DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")} {items.Count()} items returned");
         return items;
     }
 
@@ -32,7 +35,7 @@ public class ItemsController : ControllerBase
         {
             return NotFound();
         }
-        return Ok(item.AsDto());
+        return item.AsDto();
     }
 
     [HttpPost]
